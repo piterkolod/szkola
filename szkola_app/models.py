@@ -38,29 +38,36 @@ GRADES = (
 )
 
 class SchoolSubject(models.Model):
-    name = models.CharField(max_length=64, verbose_name="Nazwa przedmiotu")
-    teacher_name = models.CharField(max_length=64)
+    name = models.CharField(max_length=32, verbose_name="Nazwa przedmiotu")
 
     def __str__(self):
         return self.name
-
-
-class Student(models.Model):
-    user = models.OneToOneField(User, null=True, default=None)
-    first_name = models.CharField(max_length=32, verbose_name="Imię studenta")
-    last_name =  models.CharField(max_length=64, verbose_name="Nazwisko studenta")
-    school_class = models.IntegerField(choices =SCHOOL_CLASS)
-    grades = models.ManyToManyField(SchoolSubject, through="StudentGrades")
-
-    def __str__(self):
-        return "{} {}".format(self.last_name, self.first_name)
 
 
 class Teacher(models.Model):
     user = models.OneToOneField(User, null=True, default=None)
     first_name = models.CharField(max_length=32, verbose_name="Imię nauczyciela")
     last_name =  models.CharField(max_length=64, verbose_name="Nazwisko nauczyciela")
-    school_class = models.IntegerField(choices =SCHOOL_CLASS)
+    school_subject = models.ForeignKey(SchoolSubject, unique=True)
+
+    def __str__(self):
+        return "{} {}".format(self.first_name, self.last_name)
+
+
+class SchoolClass(models.Model):
+    number = models.IntegerField(choices =SCHOOL_CLASS)
+    teacher = models.ForeignKey(Teacher)
+
+    def __str__(self):
+        return "{} {}".format(self.number, self.teacher)
+
+
+class Student(models.Model):
+    user = models.OneToOneField(User, null=True, default=None)
+    first_name = models.CharField(max_length=32, verbose_name="Imię studenta")
+    last_name =  models.CharField(max_length=64, verbose_name="Nazwisko studenta")
+    school_class = models.ForeignKey(SchoolClass, unique=True)
+    grades = models.ManyToManyField(SchoolSubject, through="StudentGrades")
 
     def __str__(self):
         return "{} {}".format(self.last_name, self.first_name)
