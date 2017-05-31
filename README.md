@@ -14,6 +14,6 @@ Projekt nie korzysta z zewnętrznych bibliotek. Został utworzony z wykorzystani
 ## 3. Uruchomienie testów
 
 W celu uruchomienia testów należy wpisac polecenie w głównym katalogu projektu:
-'''
+```
 python manage.py test
-'''
+```
