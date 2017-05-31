@@ -48,15 +48,15 @@ class Teacher(models.Model):
     user = models.OneToOneField(User, null=True, default=None)
     first_name = models.CharField(max_length=32, verbose_name="Imię nauczyciela")
     last_name =  models.CharField(max_length=64, verbose_name="Nazwisko nauczyciela")
-    school_subject = models.ForeignKey(SchoolSubject, unique=True)
+    school_subject = models.ForeignKey(SchoolSubject)
 
     def __str__(self):
-        return "{} {}".format(self.first_name, self.last_name)
+        return "{} {} {}".format(self.first_name, self.last_name, self.school_subject)
 
 
 class SchoolClass(models.Model):
     number = models.IntegerField(choices =SCHOOL_CLASS)
-    teacher = models.ForeignKey(Teacher)
+    teacher = models.OneToOneField(Teacher)
 
     def __str__(self):
         return "{} {}".format(self.number, self.teacher)
@@ -66,7 +66,7 @@ class Student(models.Model):
     user = models.OneToOneField(User, null=True, default=None)
     first_name = models.CharField(max_length=32, verbose_name="Imię studenta")
     last_name =  models.CharField(max_length=64, verbose_name="Nazwisko studenta")
-    school_class = models.ForeignKey(SchoolClass, unique=True)
+    school_class = models.ForeignKey(SchoolClass)
     grades = models.ManyToManyField(SchoolSubject, through="StudentGrades")
 
     def __str__(self):
